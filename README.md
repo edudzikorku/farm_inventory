@@ -12,7 +12,7 @@ You can install these dependencies using pip:
 pip install -r requirements.txt
 ```
 
-Next, you will need to create a PostgreSQL database and set up the necessary tables. You can use the `setup.py` script to create the a new geodatabase, postgis extention, a schema, a table, and finally import the geodata into in the geodatabase.
+Next, you will need to create a PostgreSQL database and set up the necessary tables. You can use the `setup.py` script to create the a new geodatabase, postgis extention, a schema, a table, and finally import the geodata into the geodatabase.
 
 ## Running the project
 To run the project, you will need to start the FastAPI server. You can do this using the following command:
