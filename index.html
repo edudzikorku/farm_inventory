@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mangrove Farm Inventory</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- <style>
+      #map {
+        height: 100vh;
+      }
+    </style> -->
+  </head>
+  <body>
+    <div id="map" style="height: 100vh"></div>
+    <script>    
+        // Initialize leaflet map 
+        var map = L.map('map').setView([5.800792, 0.923747], 10);
+
+        // Add a tile 
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Fetch data from the API
+        fetch('http://localhost:8000/data')
+        .then(response => response.json())
+        .then(geojsonData => {
+            // Validate the GeoJSON data
+            if (!geojsonData || !geojsonData.type || !geojsonData.features) {
+                console.error('Invalid GeoJSON data:', geojsonData);
+                return;
+            }
+
+            // Add the GeoJSON layer
+            const geoJsonLayer = L.geoJSON(geojsonData, {
+                onEachFeature: function (feature, layer) {
+                    if (feature.properties) {
+                        const popupContent = `
+                            <strong>Name:</strong> ${feature.properties.name || 'N/A'}<br>
+                            <strong>Age:</strong> ${feature.properties.age || 'N/A'}<br>
+                            <strong>Community:</strong> ${feature.properties.community || 'N/A'}<br>
+                            <strong>Contact:</strong> ${feature.properties.contact || 'N/A'}<br>
+                            <strong>Mangrove Species:</strong> ${feature.properties.species || 'N/A'}
+                            `;
+                        layer.bindPopup(popupContent);
+                    }
+                },
+                style: {
+                    fillColor: '#fb8500',
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                }
+            }).addTo(map);
+
+            // Fit the map to the GeoJSON bounds
+            try {
+                const bounds = geoJsonLayer.getBounds();
+                map.fitBounds(bounds);
+            } catch (e) {
+                console.error('Error fitting bounds:', e);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading GeoJSON:', error);
+        });
+    </script>
+  </body>
+</html>
