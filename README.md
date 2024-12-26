@@ -4,7 +4,7 @@ This repository demonstrates a Web GIS application that displays mangrove farm l
 
 ## Setup
 
-To set up the project, you will need to install the dependencies as specified in the the requirements.txt file 
+To set up the project, you will need to install the dependencies as specified in the requirements.txt file 
 
 You can install these dependencies using pip:
 
